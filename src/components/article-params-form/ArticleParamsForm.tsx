@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './ArticleParamsForm.module.scss';
+import clsx from 'clsx';
 
 import {
 	OptionType,
@@ -25,21 +26,21 @@ type ArticleParamsFormProps = {
 export const ArticleParamsForm = ({ onChange }: ArticleParamsFormProps) => {
 	const formRef = useRef<HTMLElement | null>(null);
 
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [params, setParams] = useState<ArticleStateType>(defaultArticleState);
 
 	useEffect(() => {
-		if (!isOpen) return;
+		if (!isMenuOpen) return;
 
 		const handleClickOutside = (event: MouseEvent) => {
 			if (formRef.current && !formRef.current.contains(event.target as Node)) {
-				setIsOpen(false);
+				setIsMenuOpen(false);
 			}
 		};
 
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
-				setIsOpen(false);
+				setIsMenuOpen(false);
 			}
 		};
 
@@ -50,7 +51,7 @@ export const ArticleParamsForm = ({ onChange }: ArticleParamsFormProps) => {
 			document.removeEventListener('mousedown', handleClickOutside);
 			document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [isOpen]);
+	}, [isMenuOpen]);
 
 	const updateParameters = (
 		key: keyof ArticleStateType,
@@ -66,7 +67,7 @@ export const ArticleParamsForm = ({ onChange }: ArticleParamsFormProps) => {
 	};
 
 	const toggleForm = () => {
-		setIsOpen((prev) => !prev);
+		setIsMenuOpen((prev) => !prev);
 	};
 
 	const resetStyles = () => {
@@ -74,13 +75,14 @@ export const ArticleParamsForm = ({ onChange }: ArticleParamsFormProps) => {
 		onChange(defaultArticleState);
 	};
 
-	const sidebarStyle = `${styles.container} ${
-		isOpen ? styles.container_open : ''
-	}`.trim();
+	const sidebarStyle = clsx(
+		styles.container,
+		isMenuOpen && styles.container_open
+	);
 
 	return (
 		<>
-			<ArrowButton onClick={toggleForm} isOpen={isOpen} />
+			<ArrowButton onClick={toggleForm} isOpen={isMenuOpen} />
 			<aside ref={formRef} className={sidebarStyle}>
 				<form
 					className={styles.form}

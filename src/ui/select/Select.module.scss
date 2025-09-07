@@ -81,6 +81,10 @@
 	background: var(--grey, #c4c4c4);
 }
 
+.option:active {
+	background: var(--grey, #c4c4c4);
+}
+
 @mixin option-color-before {
 	content: '';
 	width: 35px;

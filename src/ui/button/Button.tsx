@@ -1,28 +1,23 @@
 import { Text } from 'src/ui/text';
 
 import styles from './Button.module.scss';
-import { clsx } from 'clsx';
 
 export const Button = ({
 	title,
 	onClick,
-	htmlType,
-	type,
+	buttonType,
 }: {
 	title: string;
 	onClick?: () => void;
-	htmlType?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
-	type: 'apply' | 'clear';
+	buttonType?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
 }) => {
+	const buttonClass =
+		buttonType === 'submit'
+			? `${styles.button} ${styles.button_apply}`
+			: `${styles.button} ${styles.button_clear}`;
+
 	return (
-		<button
-			className={clsx(
-				styles.button,
-				{ [styles.button_apply]: type === 'apply' },
-				{ [styles.button_clear]: type === 'clear' }
-			)}
-			type={htmlType}
-			onClick={onClick}>
+		<button className={buttonClass} type={buttonType} onClick={onClick}>
 			<Text weight={800} uppercase>
 				{title}
 			</Text>
